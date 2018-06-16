@@ -27,8 +27,9 @@ async function balance(_privateKey) {
     const body = { h, v, r, s, address } 
     // post body
     const response = await axios.post('http://localhost:8000/balance', body)
-    // return balance
-    return response.balance
+    // return data
+    const balance = response.data
+    return balance
 }
 
 module.exports = {balance}
