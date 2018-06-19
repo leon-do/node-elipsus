@@ -1,5 +1,5 @@
 const ethers = require('ethers')
-const provider = ethers.providers.getDefaultProvider() // rinkeby
+const provider = ethers.providers.getDefaultProvider('rinkeby') // rinkeby
 const solc = require('solc')
 const axios = require('axios')
 
@@ -43,12 +43,17 @@ async function open(_privateKey, _channelTimeout) {
     const { data } = ethers.Contract.getDeployTransaction(bytecode, abi)
 
     // create transaction
+    const gasPrice = Number(await provider.getGasPrice())
+    const balance = Number(await provider.getBalance(fromAddress))
+    const nonce = Number(await provider.getTransactionCount(fromAddress))
+    console.log(balance)
+
     const transaction = {
         data: data,
         gasLimit: ethers.utils.hexlify(1500000),
-        gasPrice: await provider.getGasPrice(),
-        nonce: await provider.getTransactionCount(fromAddress),
-        value: ethers.utils.hexlify(99999999999999999999999999999999)
+        gasPrice: ethers.utils.hexlify(gasPrice),
+        nonce: ethers.utils.hexlify(nonce),
+        value: ethers.utils.hexlify(0.01 * 1000000000000000000) // in wei
     }
 
     // sign transaction
@@ -66,11 +71,11 @@ async function open(_privateKey, _channelTimeout) {
             bytecode
         })
         .catch(e => {
-            console.log(e)
+            console.log(e.response.data)
             return new Error(e.response.data)
         })
 
-    return response
+    return response.data.response
 }
 
 function generateContract(_args) {
