@@ -11,10 +11,7 @@ async function send(_privateKey) {
     // get fromAddress
     const fromAddress = signingKey.address
     // hash fromAddress: https://docs.ethers.io/ethers.js/html/api-utils.html?highlight=keccak256
-    const h = ethers.utils.solidityKeccak256(
-        ['address', 'uint'],
-        [contractAddress, wei]
-    )
+    const h = ethers.utils.solidityKeccak256(['address', 'uint'], [contractAddress, wei])
     // sign and split hashed address: https://github.com/ethers-io/ethers.js/issues/85
     const { r, s, recoveryParam } = signingKey.signDigest(h)
     const v = 27 + recoveryParam

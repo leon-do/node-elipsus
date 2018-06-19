@@ -48,31 +48,29 @@ async function open(_privateKey, _channelTimeout) {
         gasLimit: ethers.utils.hexlify(1500000),
         gasPrice: await provider.getGasPrice(),
         nonce: await provider.getTransactionCount(fromAddress),
-        value: ethers.utils.hexlify(123) // await provider.getBalance(fromAddress) - 1500000
+        value: ethers.utils.hexlify(99999999999999999999999999999999)
     }
 
     // sign transaction
     const signedTransaction = wallet.sign(transaction)
 
     // send to server
-    console.log({
-        signedTransaction,
-        fromAddress,
-        nodeAddress,
-        startDate,
-        channelTimeout,
-        abi,
-        bytecode
-    })
-    const response = await axios.post('http://localhost:8000/open', {
-        signedTransaction,
-        fromAddress,
-        nodeAddress,
-        startDate,
-        channelTimeout,
-        abi,
-        bytecode
-    })
+    const response = await axios
+        .post('http://localhost:8000/open', {
+            signedTransaction,
+            fromAddress,
+            nodeAddress,
+            startDate,
+            channelTimeout,
+            abi,
+            bytecode
+        })
+        .catch(e => {
+            console.log(e)
+            return new Error(e.response.data)
+        })
+
+    return response
 }
 
 function generateContract(_args) {
