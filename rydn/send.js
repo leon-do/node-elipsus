@@ -18,7 +18,10 @@ async function send(_privateKey) {
 
     const body = { h, v, r, s, fromAddress, toAddress, contractAddress, wei }
 
-    const response = await axios.post('http://localhost:8000/send', body)
+    const response = await axios.post('http://localhost:8000/send', body).catch(e => {
+        console.log(e)
+        return new Error('unable-to-POST-send')
+    })
 }
 
 module.exports = { send }

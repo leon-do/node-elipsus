@@ -14,6 +14,10 @@ async function open(_privateKey, _channelTimeout) {
     const nodeAddress = await axios
         .get('http://localhost:8000/nodeAddress')
         .then(response => response.data.nodeAddress)
+        .catch(e => {
+            console.log(e)
+            return new Error('unable-to-GET-nodeAddress')
+        })
 
     // get start date
     const startDate = Math.floor(Date.now() / 1000)
@@ -33,7 +37,7 @@ async function open(_privateKey, _channelTimeout) {
     let abi
     let bytecode
     const output = solc.compile(contract, 1)
-    for (const contractName in output.contracts) {
+    for (let contractName in output.contracts) {
         bytecode = output.contracts[contractName].bytecode
         abi = JSON.parse(output.contracts[contractName].interface)
     }
@@ -46,14 +50,13 @@ async function open(_privateKey, _channelTimeout) {
     const gasPrice = Number(await provider.getGasPrice())
     const balance = Number(await provider.getBalance(fromAddress))
     const nonce = Number(await provider.getTransactionCount(fromAddress))
-    console.log(balance)
 
     const transaction = {
         data: data,
         gasLimit: ethers.utils.hexlify(1500000),
         gasPrice: ethers.utils.hexlify(gasPrice),
         nonce: ethers.utils.hexlify(nonce),
-        value: ethers.utils.hexlify(0.01 * 1000000000000000000) // in wei
+        value: ethers.utils.hexlify(0.0001 * 1000000000000000000) // in wei
     }
 
     // sign transaction
@@ -75,7 +78,7 @@ async function open(_privateKey, _channelTimeout) {
             return new Error(e.response.data)
         })
 
-    return response.data.response
+    return response.data
 }
 
 function generateContract(_args) {
