@@ -3,7 +3,7 @@ const provider = ethers.providers.getDefaultProvider('rinkeby') // rinkeby
 const solc = require('solc')
 const axios = require('axios')
 
-async function open(_privateKey, _channelTimeout) {
+async function open(_privateKey) {
     // initialize wallet
     const wallet = new ethers.Wallet(_privateKey)
 
@@ -16,7 +16,7 @@ async function open(_privateKey, _channelTimeout) {
         .then(response => response.data.nodeAddress)
         .catch(e => {
             console.log(e)
-            return new Error('unable-to-GET-nodeAddress')
+            return new Error(e.response.data)
         })
 
     // get start date
