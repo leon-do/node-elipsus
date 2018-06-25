@@ -34,6 +34,6 @@ const Send = sequelize.define('send', {
 })
 
 // WARNING: uncommenthing this true will drop the table if it already exists
-// Send.sync({force: true})
+// Send.sync({ force: true })
 
 module.exports = Send

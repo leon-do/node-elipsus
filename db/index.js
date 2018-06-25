@@ -1,7 +1,7 @@
 // http://docs.sequelizejs.com/manual/installation/getting-started
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize('rydnDb', '', '', {
+const sequelize = new Sequelize('rydn', '', '', {
     host: 'localhost',
     dialect: 'postgres',
     operatorsAliases: false,
