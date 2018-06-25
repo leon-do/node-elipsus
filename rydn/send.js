@@ -1,5 +1,4 @@
 const ethers = require('ethers')
-const axios = require('axios')
 
 // send(
 //     '0x0123456789012345678901234567890123456789012345678901234567890123',
@@ -20,10 +19,8 @@ async function send(_privateKey, _contractAddress, _wei) {
     // sign and split hashed address: https://github.com/ethers-io/ethers.js/issues/85
     const { r, s, recoveryParam } = signingKey.signDigest(h)
     const v = 27 + recoveryParam
-
-    const body = { h, v, r, s, _contractAddress, _wei }
-
-    return body
+    // data needed to POST to /send
+    return { h, v, r, s, _contractAddress, _wei }
 }
 
 module.exports = { send }
