@@ -1,2 +1,2 @@
-require('./startup/db')
-require('./startup/routes')
+require('./db')
+require('./routes')

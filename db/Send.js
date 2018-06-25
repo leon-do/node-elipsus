@@ -1,5 +1,5 @@
+const sequelize = require('./')
 const Sequelize = require('sequelize')
-const sequelize = require('../startup/db')
 
 const Send = sequelize.define('send', {
     id: {
