@@ -1,7 +1,7 @@
 // http://docs.sequelizejs.com/manual/installation/getting-started
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize('rydn', '', '', {
+const db = new Sequelize('rydn', '', '', {
     host: 'localhost',
     dialect: 'postgres',
     operatorsAliases: false,
@@ -15,8 +15,7 @@ const sequelize = new Sequelize('rydn', '', '', {
 })
 
 // Test the connection
-sequelize
-    .authenticate()
+db.authenticate()
     .then(() => {
         console.log('connected to db')
     })
@@ -24,4 +23,4 @@ sequelize
         console.error('Unable to connect to the db:', err)
     })
 
-module.exports = sequelize
+module.exports = db

@@ -1,7 +1,7 @@
-const sequelize = require('./')
+const db = require('./')
 const Sequelize = require('sequelize')
 
-const Send = sequelize.define('send', {
+const Transactions = db.define('transactions', {
     id: {
         primaryKey: true,
         type: Sequelize.DataTypes.UUID,
@@ -34,6 +34,6 @@ const Send = sequelize.define('send', {
 })
 
 // WARNING: uncommenthing this true will drop the table if it already exists
-// Send.sync({ force: true })
+// Transactions.sync({ force: true })
 
-module.exports = Send
+module.exports = Transactions
