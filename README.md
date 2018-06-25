@@ -1,3 +1,5 @@
+`node app.js`
+
 ```
 // insert row
 Transactions.build({
