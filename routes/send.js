@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const ethers = require('ethers')
-const uuid = require('uuid')
-const Transactions = require('../db/Transactions')
 const { verify } = require('./verify')
+const { ecrecoverAddress } = require('./verify/ecrecoverAddress')
+const { save } = require('./save')
 
 router.post('/', async (req, res) => {
-    // "try" to verify if the body is valid...damn you tinkerers!!!!
     const body = req.body
+
+    // "try" to verify if the body is valid...damn you tinkerers!!!!
     try {
         await verify(body)
     } catch (e) {
@@ -17,18 +17,24 @@ router.post('/', async (req, res) => {
         })
     }
 
-    // add to db
-    Transactions.build({
-        id: uuid(),
-        fromAddress: 'fromAddress' + Math.random(),
-        toAddress: 'toaddr' + Math.random(),
-        contractAddress: 'kontract' + Math.random(),
-        wei: Math.random() * 1000,
-        h: 'h--' + Math.random(),
-        v: 'v--' + Math.random(),
-        r: 'r--' + Math.random(),
-        s: 's--' + Math.random()
-    }).save()
+    // try to save transaction
+    try {
+        await save({
+            fromAddress: ecrecoverAddress(body),
+            toAddress: body.toAddress,
+            contractAddress: body.contractAddress,
+            wei: body.wei,
+            h: body.h,
+            v: body.v,
+            r: body.r,
+            s: body.s
+        })
+    } catch (e) {
+        return res.status(403).send({
+            status: badJob(),
+            error: e.message
+        })
+    }
 
     // prettier-ignore
     res.send({
