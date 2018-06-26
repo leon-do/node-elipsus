@@ -9,10 +9,11 @@ getBalance(donations).then(wei => {
 */
 async function getBalance(_address) {
     try {
-        const response = await ethers.providers.getDefaultProvider().getBalance(_address)
+        const response = await ethers.providers.getDefaultProvider('rinkeby').getBalance(_address)
         return Number(response.toString())
     } catch (e) {
-        throw new Error(e)
+        console.log(e)
+        throw new Error(`could not get balance for ${_address}`)
     }
 }
 

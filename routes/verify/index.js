@@ -31,7 +31,7 @@ async function verify(_body) {
     }
 
     if (Number(_body.wei) >= Number(contractBalance)) {
-        throw new Error(`don't sign a off-chain transactions your ass can't broadcast aka please fund your contract with more ETH: ${_body.contractAddress}`)
+        throw new Error(`i wants to spend ${_body.wei} but i actually has ${last.wei}`)
     }
 
     return true

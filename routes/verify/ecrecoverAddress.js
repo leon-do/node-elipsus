@@ -10,10 +10,15 @@ const address = ecrecoverAddress({
 console.log(address, address === '0xdd6fbbd0b8a23af5efbdefbf16a3a22497e203c4')
 */
 function ecrecoverAddress(_body) {
-    // who da fuk signed this?
-    const addressBuffer = util.ecrecover(util.toBuffer(_body.h), _body.v, _body.r, _body.s)
-    // convert addressBuffer to something readable
-    return '0x' + util.publicToAddress(addressBuffer).toString('hex')
+    try {
+        // who da fuk signed this?
+        const addressBuffer = util.ecrecover(util.toBuffer(_body.h), _body.v, _body.r, _body.s)
+        // convert addressBuffer to something readable
+        return '0x' + util.publicToAddress(addressBuffer).toString('hex')
+    } catch (e) {
+        console.log(e)
+        throw new Error('unable ecrecover your parsed the message')
+    }
 }
 
 module.exports = { ecrecoverAddress }
