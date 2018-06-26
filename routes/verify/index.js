@@ -26,10 +26,12 @@ async function verify(_body) {
     // get balance of contract from THE source of truth
     const contractBalance = await getBalance(_body.contractAddress)
 
+    // if user is sending less than last signed transaction
     if (Number(_body.wei) <= Number(last.wei)) {
         throw new Error(`the amount of wei is wei off`)
     }
 
+    // if user is sending more than contract balance
     if (Number(_body.wei) >= Number(contractBalance)) {
         throw new Error(`i wants to spend ${_body.wei} but i actually has ${last.wei}`)
     }
