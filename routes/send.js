@@ -1,31 +1,35 @@
 const express = require('express')
 const router = express.Router()
+const ethers = require('ethers')
+const uuid = require('uuid')
+const { verify } = require('./verify')
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     // "try" to verify if the body is valid...damn you tinkerers!!!!
     const body = req.body
     try {
-        verify(body)
+        await verify(body)
     } catch (e) {
-        console.log(e)
-        // throw it back
-        return res.status(403).send({ '🤕': e })
+        return res.status(403).send(`verification-error: ${e.message} ${badJob()}`)
     }
 
-    // prettier-ignore
-    const status = ['️️😀', '😁', '😃', '😄', '😊', '😋', '😎', '🙂', '🤗', '🤩', '🤑', '🤪', '😇', '🤠', '🤓', '😺', '😸'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // lord have mercy do not code like this
+    // add to db
 
+    // prettier-ignore
     res.send({
-        status
+        status: goodJob(),
+        data: 123
     })
 })
 
-function verify(body) {
-    let valid = false
+function goodJob() {
+    // prettier-ignore
+    return ['️️😀', '😁', '😃', '😄', '😊', '😋', '😎', '🙂', '🤗', '🤩', '🤑', '🤪', '😇', '🤠', '🤓', '😺', '😸'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // lord have mercy do not code like this
+}
 
-    if (false) {
-        throw 'invalid-body damn you tinkerers!!!!'
-    }
+function badJob() {
+    // prettier-ignore
+    return [ '😐', '😑', '😵', '😡', '😠 ', '🤬', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '💀', '👻', '💩' ].find((_, index, array) => Math.random() < 1 / (array.length - index)) // Don't try this at home
 }
 
 module.exports = router
