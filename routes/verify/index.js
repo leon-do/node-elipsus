@@ -2,6 +2,7 @@ const { ecrecoverAddress } = require('./ecrecoverAddress')
 const { getBalance } = require('./getBalance')
 const { getLastTransaction } = require('./getLastTransaction')
 
+/*
 verify({
     h: '0xc1cae7a6a9ffe7817ac1d6443cd0a3adc2ced1e0d3f0e151038350356e16cb16',
     v: '27',
@@ -11,15 +12,10 @@ verify({
     wei: 55
 })
     .then(response => {
-        // true 🙏🏼
         console.log(response)
     })
-    .catch(e => {
-        console.log(e)
-    })
-
+*/
 async function verify(_body) {
-    console.log('verifying...')
     // convert h,v,r,s to address
     const address = ecrecoverAddress(_body)
     // get the latest transaction from db
@@ -27,14 +23,13 @@ async function verify(_body) {
         contractAddress: _body.contractAddress,
         address: address
     })
-    // get balance of contract from the source of truth
+    // get balance of contract from THE source of truth
     const contractBalance = await getBalance(_body.contractAddress)
 
     if (Number(_body.wei) <= Number(last.wei)) {
         throw new Error(`the amount of wei is wei off`)
     }
 
-    // don't sign a tx your ass can't cash
     if (Number(_body.wei) >= Number(contractBalance)) {
         throw new Error(`don't sign a off-chain transactions your ass can't broadcast aka please fund your contract with more ETH: ${_body.contractAddress}`)
     }

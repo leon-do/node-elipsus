@@ -23,13 +23,11 @@ router.post('/', async (req, res) => {
 })
 
 function goodJob() {
-    // prettier-ignore
     return ['️️😀', '😁', '😃', '😄', '😊', '😋', '😎', '🙂', '🤗', '🤩', '🤑', '🤪', '😇', '🤠', '🤓', '😺', '😸'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // lord have mercy do not code like this
 }
 
 function badJob() {
-    // prettier-ignore
-    return [ '😐', '😑', '😵', '😡', '😠 ', '🤬', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '💀', '👻', '💩' ].find((_, index, array) => Math.random() < 1 / (array.length - index)) // Don't try this at home
+    return ['😡', '🤬', '🤢', '🤮', '💀', '🤱', '🤷‍', '🤦🏻‍', '👻', '💩', '💔', '🥈', '!🥇', '⛈', '🕷', '📉', '🆘'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // Don't try this at home
 }
 
 module.exports = router
