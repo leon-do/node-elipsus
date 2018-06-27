@@ -7,6 +7,15 @@ const send = require('../routes/send')
 const close = require('../routes/close')
 
 app.use(bodyParser.json())
+    .use(function(req, res, next) {
+        // https://jonathanmh.com/how-to-enable-cors-in-express-js-node-js/
+        res.header('Access-Control-Allow-Origin', '*')
+        res.header(
+            'Access-Control-Allow-Headers',
+            'Origin, X-Requested-With, Content-Type, Accept'
+        )
+        next()
+    })
     .use('/open', open)
     .use('/send', send)
     .use('/close', close)

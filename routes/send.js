@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const { verify } = require('./verify')
-const { ecrecoverAddress } = require('./verify/ecrecoverAddress')
-const { save } = require('./save')
+const { verify } = require('./common/verify')
+const { ecrecoverAddress } = require('./common/ecrecoverAddress')
+const { save } = require('./common/save')
 
 router.post('/', async (req, res) => {
     const body = req.body
+
+    console.log(body)
 
     // "try" to verify if the body is valid...damn you tinkerers!!!!
     try {
