@@ -26,15 +26,13 @@ async function verify(_body) {
     })
     // get balance of contract from THE source of truth
     const contractBalance = await getBalance(_body.contractAddress)
-
-    // if user is sending less than last signed transaction (_body.wei <= last.wei)
+    // if user is sending less than last signed transaction (_body.wei <= last.wei), then error
     if (new ethers.utils.BigNumber(_body.wei).lte(new ethers.utils.BigNumber(last.wei))) {
         const minimum = new ethers.utils.BigNumber(_body.wei).add('1').toString()
         throw new Error(`the amount of wei is wei off. send at least ${minimum}`)
     }
-
-    // if user is sending more than contract balance (_body.wei >= contractBalance)
-    if (new ethers.utils.BigNumber(_body.wei).gte(new ethers.utils.BigNumber(contractBalance))) {
+    // if user is sending more than contract balance (_body.wei >= contractBalance), then error
+    if (new ethers.utils.BigNumber(_body.wei).gt(new ethers.utils.BigNumber(contractBalance.toString()))) {
         throw new Error(`i wants to spend ${_body.wei} but i actually has ${last.wei}`)
     }
 
