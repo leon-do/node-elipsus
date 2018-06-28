@@ -33,7 +33,7 @@ async function verify(_body) {
     }
     // if user is sending more than contract balance (_body.wei >= contractBalance), then error
     if (new ethers.utils.BigNumber(_body.wei).gt(new ethers.utils.BigNumber(contractBalance.toString()))) {
-        throw new Error(`i wants to spend ${_body.wei} but i actually has ${last.wei}`)
+        throw new Error(`i wants to spend ${_body.wei} but i only has ${contractBalance}`)
     }
 
     return true

@@ -8,9 +8,9 @@ getBalance(donations).then(wei => {
 })
 */
 async function getBalance(_address) {
-    return 9000000000000000000
+    // return 9000000000000000000
     try {
-        const response = await ethers.providers.getDefaultProvider('rinkeby').getBalance(_address)
+        const response = await ethers.providers.getDefaultProvider('rinkeby' || 'homestead').getBalance(_address)
         return Number(response.toString())
     } catch (e) {
         console.log(e)
