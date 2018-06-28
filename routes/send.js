@@ -3,11 +3,11 @@ const router = express.Router()
 const { verify } = require('./common/verify')
 const { ecrecoverAddress } = require('./common/ecrecoverAddress')
 const { save } = require('./common/save')
+const { goodJob } = require('./common/goodJob')
+const { badJob } = require('./common/badJob')
 
 router.post('/', async (req, res) => {
     const body = req.body
-
-    console.log(body)
 
     // "try" to verify if the body is valid...damn you tinkerers!!!!
     try {
@@ -44,10 +44,5 @@ router.post('/', async (req, res) => {
         message: 'good job'
     })
 })
-
-// prettier-ignore
-goodJob = () => ['️️😀', '😁', '😃', '😄', '😊', '😋', '😎', '🙂', '🤗', '🤩', '🤑', '🤪', '😇', '🤠', '🤓', '😺', '😸'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // lord have mercy do not code like this
-// prettier-ignore
-badJob = () => ['😡', '🤬', '🤢', '🤮', '💀', '🤱', '🤷‍', '🤦', '👻', '💩', '💔', '🥈', '!🥇', '⛈', '🕷', '📉', '🆘'].find((_, index, array) => Math.random() < 1 / (array.length - index)) // Don't try this at home
 
 module.exports = router
