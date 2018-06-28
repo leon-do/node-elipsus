@@ -28,7 +28,7 @@ async function verify(_body) {
     const contractBalance = await getBalance(_body.contractAddress)
     // if user is sending less than last signed transaction (_body.wei <= last.wei), then error
     if (new ethers.utils.BigNumber(_body.wei).lte(new ethers.utils.BigNumber(last.wei))) {
-        const minimum = new ethers.utils.BigNumber(_body.wei).add('1').toString()
+        const minimum = new ethers.utils.BigNumber(last.wei).add('1').toString()
         throw new Error(`the amount of wei is wei off. send at least ${minimum}`)
     }
     // if user is sending more than contract balance (_body.wei >= contractBalance), then error
