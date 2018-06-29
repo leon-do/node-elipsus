@@ -1,5 +1,5 @@
 const Transactions = require('../../db/Transactions')
-
+const Op = require('sequelize').Op
 /* Ill-Deal-With-It-Later-V4.5.4.1.Test
 getLastTransaction({
     contractAddress: '0xB928D5655C7520f2405468f046224B3F1B93F17E',
@@ -9,6 +9,7 @@ getLastTransaction({
     console.log(transaction)
 })
 */
+
 async function getLastTransaction(_whereUat) {
     // don't fail me db
     try {
@@ -16,8 +17,8 @@ async function getLastTransaction(_whereUat) {
         const response = await Transactions.findAll({
             limit: 1,
             where: {
-                contractAddress: _whereUat.contractAddress,
-                fromAddress: _whereUat.address
+                contractAddress: _whereUat.contractAddress.toLowerCase(),
+                fromAddress: _whereUat.fromAddress.toLowerCase()
             },
             order: [['createdAt', 'DESC']]
         })

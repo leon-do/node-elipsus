@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { verify } = require('./common/verify')
 const { ecrecoverAddress } = require('./common/ecrecoverAddress')
-const { save } = require('./common/save')
+const { saveTransaction } = require('./common/saveTransaction')
 const { goodJob } = require('./common/goodJob')
 const { badJob } = require('./common/badJob')
 
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
     // try to save transaction
     try {
-        await save({
+        const transaction = await saveTransaction({
             fromAddress: ecrecoverAddress(body),
             toAddress: body.toAddress,
             contractAddress: body.contractAddress,
@@ -31,18 +31,16 @@ router.post('/', async (req, res) => {
             r: body.r,
             s: body.s
         })
+        res.send({
+            status: goodJob(),
+            message: transaction
+        })
     } catch (e) {
         return res.status(403).send({
             status: badJob(),
             error: e.message
         })
     }
-
-    // prettier-ignore
-    res.send({
-        status: goodJob(),
-        message: 'good job'
-    })
 })
 
 module.exports = router

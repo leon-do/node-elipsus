@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const { verify } = require('./common/verify')
 const { ecrecoverAddress } = require('./common/ecrecoverAddress')
-const { save } = require('./common/save')
+const { saveTransaction } = require('./common/saveTransaction')
 const { goodJob } = require('./common/goodJob')
 const { badJob } = require('./common/badJob')
 const solidityCode = require('./common/solidityCode')
@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 
     // try to save transaction
     try {
-        await save({
+        await saveTransaction({
             fromAddress: ecrecoverAddress(body),
             toAddress: body.toAddress,
             contractAddress: body.contractAddress,

@@ -18,11 +18,11 @@ verify({
 */
 async function verify(_body) {
     // convert h,v,r,s to address
-    const address = ecrecoverAddress(_body)
+    const fromAddress = ecrecoverAddress(_body)
     // get the latest transaction from db
     const last = await getLastTransaction({
         contractAddress: _body.contractAddress,
-        address: address
+        fromAddress: fromAddress
     })
     // get balance of contract from THE source of truth
     const contractBalance = await getBalance(_body.contractAddress)
