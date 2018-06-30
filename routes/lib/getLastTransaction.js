@@ -1,5 +1,5 @@
 const Transactions = require('../../db/Transactions')
-
+const Op = require('sequelize').Op
 /* Ill-Deal-With-It-Later-V4.5.4.1.Test
 getLastTransaction({
     contractAddress: '0xB928D5655C7520f2405468f046224B3F1B93F17E',
@@ -9,22 +9,22 @@ getLastTransaction({
     console.log(transaction)
 })
 */
-async function getLastTransaction(_whereUat) {
+
+async function getLastTransaction(_address) {
     // don't fail me db
     try {
         // if you can make this more efficient, then i hate you .then please submit a PR
         const response = await Transactions.findAll({
             limit: 1,
             where: {
-                contractAddress: _whereUat.contractAddress,
-                fromAddress: _whereUat.address
+                fromAddress: _address.toLowerCase()
             },
             order: [['createdAt', 'DESC']]
         })
         return response[0].dataValues
     } catch (e) {
         console.log(e)
-        throw new Error(`could not find in the database. you do not exist`)
+        throw new Error(`could not find last transaction for ${_address}`)
     }
 }
 

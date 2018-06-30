@@ -17,13 +17,13 @@ save({
 })
 */
 
-async function save(_column) {
+async function saveTransaction(_column) {
     try {
         const response = await Transactions.build({
             id: uuid(),
-            fromAddress: _column.fromAddress,
-            toAddress: _column.toAddress,
-            contractAddress: _column.contractAddress,
+            fromAddress: _column.fromAddress.toLowerCase(),
+            toAddress: _column.toAddress.toLowerCase(),
+            contractAddress: _column.contractAddress.toLowerCase(),
             wei: _column.wei,
             h: _column.h,
             v: _column.v,
@@ -37,4 +37,4 @@ async function save(_column) {
     }
 }
 
-module.exports = { save }
+module.exports = { saveTransaction }

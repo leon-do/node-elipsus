@@ -2,22 +2,29 @@ const ethers = require('ethers')
 const solc = require('solc')
 const express = require('express')
 const router = express.Router()
-const { verify } = require('./common/verify')
-const { ecrecoverAddress } = require('./common/ecrecoverAddress')
-const { save } = require('./common/save')
-const { goodJob } = require('./common/goodJob')
-const { badJob } = require('./common/badJob')
-const solidityCode = require('./common/solidityCode')
-
-// @TODO
-const PRIVATEKEY = '0x0123456789012345678901234567890123456789012345678901234567890123'
+const { verifyTransaction } = require('./lib/verifyTransaction')
+const { ecrecoverAddress } = require('./lib/ecrecoverAddress')
+const { saveTransaction } = require('./lib/saveTransaction')
+const { goodJob } = require('./lib/goodJob')
+const { badJob } = require('./lib/badJob')
+const solidityCode = require('./lib/solidityCode')
 
 router.post('/', async (req, res) => {
-    const body = req.body
+    /*
+    "h": "0xd7ef7209d85c5abfa542d2f10d0926a7b511e2eb8ab859a9051422fc91fc034b",
+    "v": 27,
+    "r": "0xe47573a2d6342cd4b0f81cb100f43e35e4561347edcd6fd18f79b2ccd24f4087",
+    "s": "0xace49451d9462b2dd31f467467d31e5492bf907fd8d9862accc6b3821707c35",
+    "contractAddress": "0x485A99B6504A535C9a69db6cEaC5371d828e3C88",
+    "wei": "8",
+    "toAddress": "0x5D723FEa70C04a97458426E35F4568C821b98d1A"
+    */
+    console.log('POST close() request')
+    const transaction = req.transaction
 
-    // "try" to verify if the body is valid...damn you tinkerers!!!!
+    // "try" to verify if the transaction is valid...damn you tinkerers!!!!
     try {
-        await verify(body)
+        await verifyTransaction(transaction)
     } catch (e) {
         return res.status(403).send({
             status: badJob(),
@@ -27,15 +34,15 @@ router.post('/', async (req, res) => {
 
     // try to save transaction
     try {
-        await save({
-            fromAddress: ecrecoverAddress(body),
-            toAddress: body.toAddress,
-            contractAddress: body.contractAddress,
-            wei: body.wei,
-            h: body.h,
-            v: body.v,
-            r: body.r,
-            s: body.s
+        await saveTransaction({
+            fromAddress: ecrecoverAddress(transaction),
+            toAddress: transaction.toAddress,
+            contractAddress: transaction.contractAddress,
+            wei: transaction.wei,
+            h: transaction.h,
+            v: transaction.v,
+            r: transaction.r,
+            s: transaction.s
         })
     } catch (e) {
         return res.status(403).send({
@@ -46,7 +53,7 @@ router.post('/', async (req, res) => {
 
     // broadcast transaction
     try {
-        const transaction = await broadcast(body)
+        const transaction = await broadcast(transaction)
         res.send({
             status: goodJob(),
             message: transaction
@@ -60,10 +67,10 @@ router.post('/', async (req, res) => {
 
     // try to save closed transaction
     try {
-        await save({
-            fromAddress: ecrecoverAddress(body),
-            toAddress: body.toAddress,
-            contractAddress: body.contractAddress,
+        await saveTransaction({
+            fromAddress: ecrecoverAddress(transaction),
+            toAddress: transaction.toAddress,
+            contractAddress: transaction.contractAddress,
             wei: 0,
             h: null,
             v: null,
@@ -77,24 +84,5 @@ router.post('/', async (req, res) => {
         })
     }
 })
-
-async function broadcast(_args) {
-    const provider = ethers.providers.getDefaultProvider('rinkeby')
-    const wallet = new ethers.Wallet(PRIVATEKEY, provider)
-
-    const output = solc.compile(solidityCode, 1)
-
-    let abi
-    for (let contractName in output.contracts) {
-        abi = JSON.parse(output.contracts[contractName].interface)
-    }
-
-    // locked and loaded
-    const contract = new ethers.Contract(_args.contractAddress, abi, wallet)
-
-    // call function
-    const sendPromise = await contract.Close(_args.h, _args.v, _args.r, _args.s, _args.wei)
-    return sendPromise
-}
 
 module.exports = router
