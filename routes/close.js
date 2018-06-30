@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 
     // try to save closed transaction
     try {
-        await save({
+        await saveTransaction({
             fromAddress: ecrecoverAddress(body),
             toAddress: body.toAddress,
             contractAddress: body.contractAddress,

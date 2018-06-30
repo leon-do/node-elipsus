@@ -25,7 +25,7 @@ async function getLastTransaction(_whereUat) {
         return response[0].dataValues
     } catch (e) {
         console.log(e)
-        throw new Error(`could not find in the database. you do not exist`)
+        throw new Error(`could not find last transaction in database. you do not exist`)
     }
 }
 
