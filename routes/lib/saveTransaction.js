@@ -22,7 +22,7 @@ async function saveTransaction(_column) {
         const response = await Transactions.build({
             id: uuid(),
             fromAddress: _column.fromAddress.toLowerCase(),
-            toAddress: _column.toAddress,
+            toAddress: _column.toAddress.toLowerCase(),
             contractAddress: _column.contractAddress.toLowerCase(),
             wei: _column.wei,
             h: _column.h,

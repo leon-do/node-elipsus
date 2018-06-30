@@ -10,22 +10,21 @@ getLastTransaction({
 })
 */
 
-async function getLastTransaction(_whereUat) {
+async function getLastTransaction(_address) {
     // don't fail me db
     try {
         // if you can make this more efficient, then i hate you .then please submit a PR
         const response = await Transactions.findAll({
             limit: 1,
             where: {
-                contractAddress: _whereUat.contractAddress.toLowerCase(),
-                fromAddress: _whereUat.fromAddress.toLowerCase()
+                fromAddress: _address.toLowerCase()
             },
             order: [['createdAt', 'DESC']]
         })
         return response[0].dataValues
     } catch (e) {
         console.log(e)
-        throw new Error(`could not find last transaction in database. you do not exist`)
+        throw new Error(`could not find last transaction for ${_address}`)
     }
 }
 

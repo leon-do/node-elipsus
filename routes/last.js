@@ -1,13 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const { getLastTransaction } = require('./common/getLastTransaction')
-const { goodJob } = require('./common/goodJob')
-const { badJob } = require('./common/badJob')
+const { getLastTransaction } = require('./lib/getLastTransaction')
+const { goodJob } = require('./lib/goodJob')
+const { badJob } = require('./lib/badJob')
 
 router.get('/', async (req, res) => {
+    console.log('GET last()')
     try {
-        const lastTransaction = await getLastTransaction(req.query)
-
+        const address = req.query.address
+        const contractAddress = req.query.contractAddress
+        const lastTransaction = await getLastTransaction(address)
         res.send({
             status: goodJob(),
             message: lastTransaction

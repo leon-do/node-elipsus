@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 router.post('/', async (req, res) => {
-    console.log('open:', req.body)
+    console.log('POST open() request')
     res.send('opened!')
 })
 
